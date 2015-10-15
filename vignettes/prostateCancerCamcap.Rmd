@@ -6,7 +6,7 @@ output:
   BiocStyle::html_document
 ---
 
-In this document, I describe how the GEO data entry for the Varambally data was processed and saved into an object for analysis in Bioconductor. First of all load the relevant libraries for grabbing and manipulaing the data
+In this document, I describe how the GEO data entry for the Camcap data was processed and saved into an object for analysis in Bioconductor. First of all load the relevant libraries for grabbing and manipulaing the data
 
 ```{r}
 library(GEOquery)
@@ -74,6 +74,37 @@ Replace the pheno data of the object and save
 pData(geoData) <- pd2
 camcap <- geoData
 save(camcap, file="../data/camcap.rda")
+
+```
+
+```{r}
+eMat <- exprs(camcap)
+
+iqr <- apply(eMat, 1, IQR,na.rm=TRUE)
+pq <- unlist(mget(rownames(eMat),illuminaHumanv4PROBEQUALITY))
+
+minGeneInfo <- data.frame(fData(camcap)[,c("Symbol","Entrez_Gene_ID")],iqr,ProbeQuality=pq)
+
+
+
+write.csv(data.frame(minGeneInfo,eMat), file="camcapPerSampleExpression.csv",quote=FALSE)
+
+colnames(eMat) <- pData(camcap)$Sample
+library(limma)
+
+des <- model.matrix(~0+as.factor(pData(camcap)$Sample_Group))
+colnames(des) <- c("Benign","CRPC","Tumour")
+aveVals <- lmFit(eMat,des)
+
+write.csv(data.frame(minGeneInfo,aveVals$coeff),file="camcapPerSampleTypeExpression.csv",quote=FALSE)
+
+haveGrp <- !is.na(pData(camcap)$iCluster)
+
+des <- model.matrix(~0+as.factor(pData(camcap)$iCluster[haveGrp]))
+colnames(des) <- paste("iCluser",1:5)
+aveVals <- lmFit(eMat[,haveGrp],des)
+
+write.csv(data.frame(minGeneInfo,aveVals$coeff),file="camcapPeriClusterExpression.csv",quote=FALSE)
 
 ```
 
