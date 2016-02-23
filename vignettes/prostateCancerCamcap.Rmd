@@ -43,7 +43,13 @@ Group[grep("CRPC",pd$title)] <- "CRPC"
 
 pd2 <- data.frame("geo_accession" = pd$geo_accession, Sample = pd$description, Sample_Group = Group,Gleason=gsub("tumour gleason: ","",pd$characteristics_ch1.1), 
                             iCluster = gsub("(derived data) iclusterplus group: ","",pd$characteristics_ch1.3,fixed=TRUE),ECE=gsub("extra-capsular extension (ece): ","",pd$characteristics_ch1.4,fixed=TRUE),PSM = gsub("positive surgical margins (psm): ","",pd$characteristics_ch1.5,fixed=TRUE),BCR = gsub("biochemical relapse (bcr): ","",pd$characteristics_ch1.6,fixed=TRUE),
-                            Time = gsub("time to bcr (months): ","",pd$characteristics_ch1.7,fixed=TRUE),ERG = gsub("tmprss2: ERG gene fusion status: ","",pd$characteristics_ch1.8,fixed=TRUE))
+                            TotalTime = gsub("time to bcr (months): ","",pd$characteristics_ch1.7,fixed=TRUE),ERG = gsub("tmprss2: ERG gene fusion status: ","",pd$characteristics_ch1.8,fixed=TRUE),
+                  Age = gsub("age at diag: ","",pd$characteristics_ch1.9,fixed=TRUE),
+                  PSA = gsub("psa at diag: ","",pd$characteristics_ch1.10,fixed=TRUE),
+                  ClinicalStage = gsub("clinical stage: ","",pd$characteristics_ch1.11,fixed=TRUE),
+                  PathStage = gsub("clinical stage: ","",pd$characteristics_ch1.12,fixed=TRUE),
+                  FollowUpTime =gsub("total follow up (months): ","",pd$characteristics_ch1.13,fixed=TRUE)
+                  )
 
 pd2$iCluster <- gsub("N/A", NA, pd2$iCluster)
 pd2$iCluster[which(pd2$iCluster == "")] <- NA
@@ -59,9 +65,10 @@ pd2$PSM[which(pd2$PSM == "")] <- NA
 pd2$BCR <- gsub("N/A", NA, pd2$BCR)
 pd2$BCR[which(pd2$BCR == "")] <- NA
 
-pd2$Time <- gsub("N/A", NA, pd2$Time)
-pd2$Time[which(pd2$Time == "")] <- NA
+pd2$TotalTime <- gsub("N/A", NA, pd2$TotalTime)
+pd2$TotalTime[which(pd2$TotalTime == "")] <- NA
 
+pd2$FollowUpTime[which(pd2$FollowUpTime=="")] <- NA
 
 rownames(pd2) <- pd2$geo_accession
 
