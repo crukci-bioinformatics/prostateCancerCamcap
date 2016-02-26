@@ -80,7 +80,7 @@ Replace the pheno data of the object and save
          
 pData(geoData) <- pd2
 camcap <- geoData
-save(camcap, file="../data/camcap.rda")
+save(camcap, file="data/camcap.rda",compress="xz")
 
 ```
 
