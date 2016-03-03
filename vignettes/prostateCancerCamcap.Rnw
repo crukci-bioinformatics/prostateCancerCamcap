@@ -18,7 +18,6 @@ In this document, I describe how the GEO data entry for the Camcap data was proc
 library(GEOquery)
 library(dplyr)
 library(tidyr)
-library(org.Hs.eg.db)
 @
 
 
@@ -39,6 +38,7 @@ geoData <- getGEO(filename=destfile)
 
 We tidy up the data from GEO; creating a new data frame of just the clinical characteristics of interest.
 
+NOTE: Would be neater to use dplyr and tidyr for this in future
 <<eval=FALSE>>=
 
 pd <- pData(geoData)
@@ -59,16 +59,37 @@ pd2 <- data.frame("geo_accession" = pd$geo_accession, Sample = pd$description, S
 pd2$iCluster <- gsub("N/A", NA, pd2$iCluster)
 pd2$iCluster[which(pd2$iCluster == "")] <- NA
 
+weirdValue <- setdiff(pd2$iCluster, c("clust1","clust2","clust3","clust4","clust5",NA))
+
+if(length(weirdValue) > 0) pd2$iCluster[pd2$iCluster %in% weirdValue] <- NA
+
 pd2$Gleason <- gsub("N/A", NA, pd2$Gleason)
+weirdValue <- setdiff(pd2$Gleason, c("10=5+5","6=3+3","7=3+4","7=4+3","8=3+5","9=5+4",NA))
+
+if(length(weirdValue) > 0) pd2$Gleason[pd2$Gleason %in% weirdValue] <- NA
+pd2$Gleason <- factor(pd2$Gleason, levels = c("6=3+3","7=3+4","7=4+3","8=3+5","9=5+4","10=5+5"))
 
 pd2$ECE <- gsub("unknown",NA,pd2$ECE)
 pd2$ECE[which(pd2$ECE == "")] <- NA
 
+weirdValue <- setdiff(pd2$ECE, c("N","Y",NA))
+if(length(weirdValue) > 0) pd2$ECE[pd2$ECE %in% weirdValue] <- NA
+
+
 pd2$PSM <- gsub("unknown",NA,pd2$PSM)
 pd2$PSM[which(pd2$PSM == "")] <- NA
 
+weirdValue <- setdiff(pd2$PSM, c("N","Y",NA))
+if(length(weirdValue) > 0) pd2$PSM[pd2$PSM %in% weirdValue] <- NA
+
+
+
 pd2$BCR <- gsub("N/A", NA, pd2$BCR)
 pd2$BCR[which(pd2$BCR == "")] <- NA
+
+weirdValue <- setdiff(pd2$BCR, c("N","Y",NA))
+if(length(weirdValue) > 0) pd2$BCR[pd2$BCR %in% weirdValue] <- NA
+
 
 pd2$TotalTime <- gsub("N/A", NA, pd2$TotalTime)
 pd2$TotalTime[which(pd2$TotalTime == "")] <- NA
@@ -85,10 +106,5 @@ pData(geoData) <- pd2
 camcap <- geoData
 save(camcap, file="data/camcap.rda",compress="xz")
 @
-
-
-
-
-
 
 \end{document}
