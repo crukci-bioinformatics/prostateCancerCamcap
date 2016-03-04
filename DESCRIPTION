@@ -6,7 +6,7 @@ Date: 2016-02-29
 Author: Mark Dunning
 Maintainer: Mark Dunning <mark.dunning@cruk.cam.ac.uk>
 Description: A Bioconductor data package for the Ross-Adams (2015) Prostate Cancer dataset.
-License: GPL (>= 2)
+License: Artistic-2.0
 LazyData: TRUE
 Depends: Biobase, R (>= 2.10) 
 Suggests: GEOquery
