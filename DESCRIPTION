@@ -9,5 +9,5 @@ Description: A Bioconductor data package for the Ross-Adams (2015) Prostate Canc
 License: GPL (>= 2)
 LazyData: TRUE
 Depends: Biobase, R (>= 2.10) 
-Suggests: GEOquery, dplyr, org.Hs.eg.db
+Suggests: GEOquery
 biocViews: ExperimentData, ExpressionData,GEO, MicroarrayData, CancerData, ProstateCancerData
