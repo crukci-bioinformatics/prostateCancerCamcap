@@ -42,6 +42,8 @@ geoData <- getGEO(filename=destfile)
 
 We tidy up the data from GEO; creating a new data frame of just the clinical characteristics of interest. This involves removing the prefixes GEO gives to each variable and setting {\tt NA} values correcly. We also check for some columns that the values are within an acceptable set and exclude any weird values. This was required as we saw that one sample seemed to have psa measurements in what would normally be the iCluster group column.
 
+The pheno data also contains the five {\tt iCluster} groups which were determined by integrative clustering.
+
 NOTE: Would be neater to use dplyr and tidyr for this in future
 <<eval=FALSE>>=
 
