@@ -12,5 +12,6 @@
     \author{
 Mark Dunning
     }
+    \value{ExpressionSet object for the dataset}
     \usage{camcap}
     \keyword{datasets}
